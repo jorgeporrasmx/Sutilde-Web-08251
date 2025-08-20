@@ -2,4 +2,13 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/vqiidokej6l4/public_html
+
+    # Copia el repo al sitio
     - /usr/bin/rsync -av --delete --exclude='.git/' --exclude='.cpanel.yml' ./ "$DEPLOYPATH"/
+
+    # Fija permisos seguros (carpetas 755, archivos 644)
+    - /usr/bin/find "$DEPLOYPATH" -type d -exec chmod 755 {} \;
+    - /usr/bin/find "$DEPLOYPATH" -type f -exec chmod 644 {} \;
+
+    # Asegura el .htaccess legible (si existe en el destino)
+    - /usr/bin/chmod 644 "$DEPLOYPATH/.htaccess" || true
